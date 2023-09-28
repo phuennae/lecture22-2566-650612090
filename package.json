@@ -1,5 +1,5 @@
 {
-  "name": "lecture22",
+  "name": "lab22",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -33,5 +33,8 @@
   "devDependencies": {
     "@types/node": "20.7.0",
     "@types/react": "18.2.23"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }
