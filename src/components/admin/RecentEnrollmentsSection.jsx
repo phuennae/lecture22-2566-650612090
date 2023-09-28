@@ -18,7 +18,7 @@ export const RecentEnrollmentsSection = () => {
       const resp = await axios.get("/api/enrollment/recent", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // console.log(resp.data.recentEnrollments);
+      console.log(resp.data.recentEnrollments);
       setRecentEnrollments(resp.data.recentEnrollments);
     } catch (error) {
       if (error.response) {
@@ -32,6 +32,11 @@ export const RecentEnrollmentsSection = () => {
     callRecentEnrollmentApi();
   }, []);
 
+  function computeDate(dateISOString) {
+    const date = new Date(dateISOString);
+    return date.toLocaleTimeString() + " " + date.toLocaleDateString();
+  }
+
   return (
     <Paper withBorder p="md">
       <Title order={4}>Recent Enrollment(s)</Title>
@@ -42,10 +47,16 @@ export const RecentEnrollmentsSection = () => {
         recentEnrollments &&
         recentEnrollments.map((enroll) => (
           <Group spacing="xs" key={enroll.id}>
-            <Text fw="bold" color="dimmed"></Text>
+            <Text fw="bold" color="dimmed">
+              {enroll.student.studentId} - {enroll.student.firstName}
+            </Text>
             <Text color="dimmed">👉</Text>
-            <Text fw="bold" color="dimmed"></Text>
-            <Text color="dimmed" ml="auto"></Text>
+            <Text fw="bold" color="dimmed">
+              {enroll.course.courseNo} - {enroll.course.title}
+            </Text>
+            <Text color="dimmed" ml="auto">
+              {computeDate(enroll.createdAt)}
+            </Text>
           </Group>
         ))}
     </Paper>

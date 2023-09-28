@@ -25,13 +25,35 @@ export const GET = async () => {
   }
 
   const prisma = getPrisma();
-  const userCount = 0;
-  const courseCount = 0;
-  const studentCount = 0;
-  const cpeCount = 0;
-  const isneCount = 0;
+  const userCount = await prisma.user.count();
+  const courseCount = await prisma.course.count();
+  const studentCount = await prisma.student.count();
+  const cpeCount = await prisma.student.count({
+    where: {
+      program: "CPE",
+    },
+  });
+  const isneCount = await prisma.student.count({
+    where: {
+      program: "ISNE",
+    },
+  });
 
-  const enrollmentCountByStudent = [];
+  const enrollmentCountByStudent = await prisma.student.findMany({
+    select: {
+      studentId: true,
+      firstName: true,
+      lastName: true,
+      _count: {
+        select: {
+          enrollments: true,
+        },
+      },
+    },
+    orderBy: {
+      studentId: "asc",
+    },
+  });
 
   return NextResponse.json({
     ok: true,
